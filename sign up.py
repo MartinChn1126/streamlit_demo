@@ -1,5 +1,5 @@
 import streamlit as st
-from app import log_page
+from init import log_page
 
 def username_form_test(username) -> bool:
     pass
@@ -12,8 +12,10 @@ def query_user(username):
     result = st.session_state['db'].execute("SELECT * FROM USER WHERE USERNAME = ?",(username,)).fetchone()
     if result:
         st.markdown(':red[{}] has been created!'.format(username))
-        st.session_state['account'] = username
-
+        st.text('Pls switch to the login page')
+    else:
+        # add user and password to db
+        pass
 
 def signup_page():
     with st.container(border=True):
@@ -23,7 +25,9 @@ def signup_page():
         username = first_name + last_name
         password = st.text_input('Password',type='password')
         st.button('Sign up',on_click=query_user,args=(username,))
-        st.text('Have an account?')
-        st.page_link(log_page,label='login')
+
+        
+        st.text("Have an account?")
+        st.page_link(log_page)
 
 signup_page()
