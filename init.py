@@ -66,6 +66,12 @@ def init_web():
     if 'account' not in st.session_state:
         st.session_state['account'] = None
 
+    if 'querying'not in st.session_state:
+        st.session_state['querying'] = []
+
+    if 'uploading' not in st.session_state:
+        st.session_state['uploading'] = []
+
     database_init()
 
 def add_examples_to_database(db:sqlite3.Connection):
@@ -75,8 +81,6 @@ def add_examples_to_database(db:sqlite3.Connection):
     for usern,pw,authority in l:
         db.execute(insert_user,(usern,pw,authority))
     db.commit()
-
-
 
 @st.dialog('Logout?')
 def logout():
@@ -88,19 +92,37 @@ def logout():
         st.session_state['account'] = None
         st.rerun()
     elif cancel:
-        st.rerun()        
+        st.rerun()
 
-def upload_database():
+def query_database(table:str,stmt:str):
     pass
 
-def query_database():
-    pass
+def upload_database(table:str,stms:str,*args):
+    """
+    upload data to the current database with specified table and columns.
+    Parameters:
+    ----------
+    table: the table name in the database to upload data to,
 
-def generate_func_pages(path:str): # path is the directory where pages are saved. In this case, it is 'UIs'
-    pages_list = []
-    for name in listdir('./'+path):
-        pages_list.append(st.Page('UIs/'+name,url_path=name))
-    return pages_list
+    """
+
+    if 'data' not in st.session_state or not st.session_state['data']:
+        pass
+    else:
+        db = st.session_state['db']
+
+def generate_pages(path:str='UIs')->dict: # path is the directory where pages are saved. In this case, it is 'UIs'
+    pages = {'Account':None,'Job':[],'Authority':[]}
+    for item in listdir('./'+path):
+        category,name = item[:2],item[2:]
+        if category == '1_':
+            pages['Job'].append(st.Page(name))
+        elif category == '3_':
+            pages['Account'].append(st.Page(name))
+        else:
+            pages['Authority'].append(st.Page(name))
+
+    return pages
 
 def get_all_adminstrators():
     admins = st.session_state['db'].execute("""SELECT USERNAME FROM USER WHERE AUTHORITY=?""",('administrators',))
@@ -109,5 +131,5 @@ def get_all_adminstrators():
 log_page = st.Page('login.py',url_path='login')
 signup_page = st.Page('sign up.py',url_path='signup')
 
-accounts_manage = st.Page('accountments manage.py',url_path='account')
+accounts_manage = st.Page('accounts manage.py',url_path='account')
 

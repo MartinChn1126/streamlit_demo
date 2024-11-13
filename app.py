@@ -15,7 +15,7 @@ def generate_account_page():
 
 if st.session_state['account']:
     
-    pg = st.navigation({'Job':generate_func_pages('UIs'),'Account':generate_account_page()})
+    pg = st.navigation({'Job':generate_pages('UIs'),'Account':generate_pages()})
     with st.sidebar:
         button = st.button('{}'.format(st.session_state['account']))
         if button:

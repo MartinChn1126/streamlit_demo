@@ -21,6 +21,7 @@ def query(username:str,password:str):
     else:
         if (username,password) == result:
             st.session_state['ui_feedback'] = UIFeedback.default
+            
             st.session_state['account'] = username
         else:
             st.session_state['ui_feedback'] = UIFeedback.password_wrong
@@ -44,6 +45,4 @@ def login_page():
                 query(username,password)
             st.rerun()
 
-
-            
 login_page()
