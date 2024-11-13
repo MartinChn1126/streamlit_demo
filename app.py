@@ -15,13 +15,13 @@ def generate_account_page():
 
 if st.session_state['account']:
     
-    pg = st.navigation({'Job':generate_pages('UIs'),'Account':generate_pages()})
+    pg = st.navigation({'Job':generate_pages(),'Account':generate_account_page()})
     with st.sidebar:
         button = st.button('{}'.format(st.session_state['account']))
         if button:
             logout()
 else:
-    pg = st.navigation([log_page,signup_page],position='hidden')
+    pg = st.navigation([signin_page,signup_page],position='hidden')
     
 
 pg.run()

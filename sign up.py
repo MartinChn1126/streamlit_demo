@@ -1,5 +1,5 @@
 import streamlit as st
-from init import log_page
+from init import signin_page
 
 def username_form_test(username) -> bool:
     pass
@@ -28,6 +28,6 @@ def signup_page():
 
         
         st.text("Have an account?")
-        st.page_link(log_page)
+        st.page_link(signin_page)
 
 signup_page()

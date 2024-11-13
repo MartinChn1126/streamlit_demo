@@ -1,7 +1,7 @@
 import streamlit as st
 from enum import Enum
 import sqlite3
-from os import listdir
+from os import listdir,sep
 
 class AccountAuthority(Enum):
     administrators = 'admin'
@@ -28,7 +28,7 @@ def hide_menu_set():
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
-        ._terminalButton_rix23_138" {display:none}
+        .stAppHeader{display:none}
     </style>
 """, unsafe_allow_html=True)
 
@@ -94,10 +94,13 @@ def logout():
     elif cancel:
         st.rerun()
 
-def query_database(table:str,stmt:str):
+def delete_data_from_database(table:str,stmts:str):
     pass
 
-def upload_database(table:str,stms:str,*args):
+def query_database(table:str,stmts:str):
+    pass
+
+def update_database(table:str,stmts:str,*args):
     """
     upload data to the current database with specified table and columns.
     Parameters:
@@ -111,24 +114,20 @@ def upload_database(table:str,stms:str,*args):
     else:
         db = st.session_state['db']
 
-def generate_pages(path:str='UIs')->dict: # path is the directory where pages are saved. In this case, it is 'UIs'
-    pages = {'Account':None,'Job':[],'Authority':[]}
-    for item in listdir('./'+path):
-        category,name = item[:2],item[2:]
-        if category == '1_':
-            pages['Job'].append(st.Page(name))
-        elif category == '3_':
-            pages['Account'].append(st.Page(name))
-        else:
-            pages['Authority'].append(st.Page(name))
+def add_data_to_database(table:str,stmts:str,*args):
+    pass
 
+def generate_pages(path:str='uis')->dict: # path is the directory where pages are saved. In this case, it is 'uis'
+    pages = []
+    for item in listdir('./'+path):
+        pages.append(st.Page('.'+sep+path+sep+item))
     return pages
 
 def get_all_adminstrators():
     admins = st.session_state['db'].execute("""SELECT USERNAME FROM USER WHERE AUTHORITY=?""",('administrators',))
     return admins
 
-log_page = st.Page('login.py',url_path='login')
+signin_page = st.Page('sign in.py',url_path='sign in')
 signup_page = st.Page('sign up.py',url_path='signup')
 
 accounts_manage = st.Page('accounts manage.py',url_path='account')
