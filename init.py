@@ -25,12 +25,14 @@ def hide_menu_set():
         .reportview-container {
             margin-top: -2em;
         }
-        
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
         ._terminalButton_rix23_138" {display:none}
     </style>
 """, unsafe_allow_html=True)
 
-    st.html('''<style>
+    """st.html('''<style>
         #MainMenu {visibility: hidden;}
         .stDeployButton {display:none;}
         footer {visibility: hidden;}
@@ -38,7 +40,7 @@ def hide_menu_set():
         .stAppToolbar {display:none}
         ._terminalButton_rix23_138 {display:none}
 
-</style>''')
+</style>''')"""
     
 hide_menu_set()
 
@@ -91,12 +93,18 @@ def logout():
 def upload_database():
     pass
 
+def query_database():
+    pass
+
 def generate_func_pages(path:str): # path is the directory where pages are saved. In this case, it is 'UIs'
     pages_list = []
     for name in listdir('./'+path):
         pages_list.append(st.Page('UIs/'+name,url_path=name))
     return pages_list
 
+def get_all_adminstrators():
+    admins = st.session_state['db'].execute("""SELECT USERNAME FROM USER WHERE AUTHORITY=?""",('administrators',))
+    return admins
 
 log_page = st.Page('login.py',url_path='login')
 signup_page = st.Page('sign up.py',url_path='signup')

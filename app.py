@@ -5,10 +5,6 @@ init_web()
 
 # add_examples_to_database(st.session_state['db'])
 
-def get_all_adminstrators():
-    admins = st.session_state['db'].execute("""SELECT USERNAME FROM USER WHERE AUTHORITY=?""",('administrators',))
-    return admins
-
 admins = get_all_adminstrators()
 
 def generate_account_page():
