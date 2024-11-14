@@ -4,10 +4,10 @@ import sqlite3
 from os import listdir,sep
 
 class AccountAuthority(Enum):
-    administrators = 'admin'
-    salers = 'saler'
-    workers = 'worker'
-    stockmans = 'stockman'
+    administrator = 'admin'
+    saler = 'saler'
+    worker = 'worker'
+    stockman = 'stockman'
     default = 'default'
 
 class UIFeedback(Enum):
@@ -19,7 +19,7 @@ class UIFeedback(Enum):
 
 
 def hide_menu_set():
-    st.set_page_config('Main Page',layout='wide')
+    # st.set_page_config('Main Page',layout='wide')
     st.markdown("""
     <style>
         .reportview-container {
@@ -50,8 +50,8 @@ def database_init():
 
     create_user_table = '''CREATE TABLE IF NOT EXISTS USER(
     USERNAME TEXT PRIMARY KEY NOT NULL,
-    PASSWORD TEXT NOT NULL,
-    AUTHORITY TEXT);
+    PASSWORD TEXT DEFAULT "123456",
+    AUTHORITY TEXT DEFAULT "default");
     CREATE UNIQUE INDEX IF NOT EXISTS USERID ON USER(USERNAME)
     '''
     user_db.executescript(create_user_table)
@@ -75,11 +75,10 @@ def init_web():
     database_init()
 
 def add_examples_to_database(db:sqlite3.Connection):
-    l = [('Martin','123','administrators'),('Lilly','4546','salers')]
+    l = [('Martin','123','administrator'),('Lilly','4546','saler'),('Nancy','123456','worker'),('Andrew','123456','stockman')]
     # Todo change the 'admin' above line to custom AccountAuthority and save in database
     insert_user = "INSERT INTO USER VALUES (?,?,?)"
-    for usern,pw,authority in l:
-        db.execute(insert_user,(usern,pw,authority))
+    db.executemany(insert_user,l)
     db.commit()
 
 @st.dialog('Logout?')
@@ -97,8 +96,10 @@ def logout():
 def delete_data_from_database(table:str,stmts:str):
     pass
 
-def query_database(table:str,stmts:str):
-    pass
+def query_database():
+    db = st.session_state['db']
+    data = db.execute("SELECT * FROM USER")
+    st.write(data)
 
 def update_database(table:str,stmts:str,*args):
     """
@@ -124,7 +125,7 @@ def generate_pages(path:str='uis')->dict: # path is the directory where pages ar
     return pages
 
 def get_all_adminstrators():
-    admins = st.session_state['db'].execute("""SELECT USERNAME FROM USER WHERE AUTHORITY=?""",('administrators',))
+    admins = st.session_state['db'].execute("""SELECT USERNAME FROM USER WHERE AUTHORITY=?""",('administrator',))
     return admins
 
 signin_page = st.Page('sign in.py',url_path='sign in')
