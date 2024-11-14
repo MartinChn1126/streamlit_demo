@@ -19,7 +19,7 @@ class UIFeedback(Enum):
 
 
 def hide_menu_set():
-    # st.set_page_config('Main Page',layout='wide')
+    st.set_page_config('Main Page',layout='wide')
     st.markdown("""
     <style>
         .reportview-container {
