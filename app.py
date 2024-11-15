@@ -7,19 +7,27 @@ init_web()
 
 admins = get_all_adminstrators()
 
+# reset_admin_password()
+
+# query_database()
+
 def generate_account_page():
     if (st.session_state['account'],) in admins:
-        return [accounts_manage]
+        return [password_manage,accounts_manage]
     else:
-        return [] # add some comments
+        return [password_manage] # add some comments
 
 if st.session_state['account']:
     
-    pg = st.navigation({'Job':generate_pages(),'Account':generate_account_page()})
+    pg = st.navigation({'Account':generate_account_page(),'Job':generate_pages()})
     with st.sidebar:
-        button = st.button('{}'.format(st.session_state['account']))
-        if button:
-            logout()
+        with st.popover('{}'.format(st.session_state['account']),use_container_width=True):
+            button = st.button('退出')
+            change_pw = st.button('更改密码')
+            if button:
+                logout()
+            if change_pw:
+                st.switch_page(password_manage)
 else:
     pg = st.navigation([signin_page,signup_page],position='hidden')
     

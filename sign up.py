@@ -1,11 +1,7 @@
 import streamlit as st
 from init import signin_page
 
-def username_form_test(username) -> bool:
-    pass
 
-def password_form_test(password) -> bool:
-    pass
 
     
 def query_user(username):
@@ -29,5 +25,7 @@ def signup_page():
         
         st.text("Have an account?")
         st.page_link(signin_page)
+
+
 
 signup_page()

@@ -17,4 +17,6 @@ col25.text_input('电话号码',max_chars=11,label_visibility='collapsed')
 
 
 data = pd.DataFrame({'产品ID':[],'产品名称':[],'产品描述':[],'当前库存':[],'数量':[],'销售价格':[]})
-st.data_editor(data,use_container_width=True,hide_index=True,num_rows='dynamic',column_config={'产品ID':st.column_config.NumberColumn(required=True),"销售价格":st.column_config.NumberColumn()})
+st.data_editor(data,use_container_width=True,hide_index=True,num_rows='dynamic',column_config={'产品ID':st.column_config.NumberColumn(required=True),"销售价格":st.column_config.NumberColumn(),"数量":st.column_config.NumberColumn(required=True,default=1,)})
+
+st.button('提交')

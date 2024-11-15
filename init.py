@@ -54,6 +54,12 @@ def database_init():
     AUTHORITY TEXT DEFAULT "default");
     CREATE UNIQUE INDEX IF NOT EXISTS USERID ON USER(USERNAME)
     '''
+
+    create_productions_map = """CREATE TABLE IF NOT EXIST PRODUCTION(
+    ID INT PRIMARY KEY NOT NULL,
+    NAME TEXT NOT NULL,
+    DESCRIPTION TEXT,);"""
+
     user_db.executescript(create_user_table)
 
     st.session_state['db'] = user_db
@@ -80,6 +86,12 @@ def add_examples_to_database(db:sqlite3.Connection):
     insert_user = "INSERT INTO USER VALUES (?,?,?)"
     db.executemany(insert_user,l)
     db.commit()
+
+def username_form_test(username) -> bool:
+    pass
+
+def password_form_test(password) -> bool:
+    return False
 
 @st.dialog('Logout?')
 def logout():
@@ -128,8 +140,15 @@ def get_all_adminstrators():
     admins = st.session_state['db'].execute("""SELECT USERNAME FROM USER WHERE AUTHORITY=?""",('administrator',))
     return admins
 
+
+def reset_admin_password():
+    db = st.session_state['db']
+    db.execute("""UPDATE USER SET PASSWORD = ? WHERE USERNAME=?""",(123,'Martin'))
+    db.commit()
+
 signin_page = st.Page('sign in.py',url_path='sign in')
 signup_page = st.Page('sign up.py',url_path='signup')
 
 accounts_manage = st.Page('accounts manage.py',url_path='account')
+password_manage = st.Page('password manage.py')
 
